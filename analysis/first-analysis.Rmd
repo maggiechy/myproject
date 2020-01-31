@@ -1,0 +1,39 @@
+---
+title: "first-analysis"
+author: "Your Name"
+date: "2020-01-31"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r}
+library(MASS)
+data.original = Boston
+
+lm.full = lm(medv~.,data=data.original)
+
+AIC(lm.full)
+# 3027.609
+
+lm.1 = lm(medv~.-nox,data=data.original)
+
+AIC(lm.1)
+# 3047.383
+
+# lower AIC means better performance
+# AIC takes into account number of predictors
+
+lm.min <- lm(medv ~ 1, data=data.original)
+lm.max <- lm(medv ~ ., data=data.original)
+
+scp <- list(lower = lm.min, upper = lm.max)
+
+lm.selected <- stepAIC(lm.min, 
+                       direction = 'forward',
+                       scope = scp,
+                       steps = 1)
+```
+
